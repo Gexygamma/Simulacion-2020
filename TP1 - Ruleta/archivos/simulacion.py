@@ -3,6 +3,9 @@ import numpy as np
 TAMAÑO_RULETA = 36
 INCLUIR_CERO = True
 
+def configuracion():
+    return (TAMAÑO_RULETA, INCLUIR_CERO)
+
 class Simulacion(object):
     def __init__(self):
         self.frecuencias = []
@@ -11,7 +14,7 @@ class Simulacion(object):
         self.variancias = []
     
     def generar_iteracion(self, cantidad_tiradas):
-        return np.random.randint(INCLUIR_CERO*1, TAMAÑO_RULETA+1, size=cantidad_tiradas)
+        return np.random.randint(not INCLUIR_CERO, TAMAÑO_RULETA+1, size=cantidad_tiradas)
 
     def ejecutar(self, iteraciones, numero):
         for cantidad_tiradas in range(1, iteraciones+1):

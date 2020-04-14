@@ -13,12 +13,10 @@ if __name__ == "__main__":
     simulacion.append(Simulacion())
     simulacion[0].ejecutar(iteraciones, numero)
 
-    graficar(simulacion[0])
+    graficar(simulacion[0], iteraciones, numero)
 
     for s in range(1, cant_simulaciones):
         simulacion.append(Simulacion())
         simulacion[s].ejecutar(iteraciones, numero)
 
-    graficar_multiples(simulacion)
-
-    # FORMATO LATEX y LINEAS DE FREC ESPERADA Y OTRAS ESPERADAS COSAS
+    graficar_multiples(simulacion, iteraciones, numero)

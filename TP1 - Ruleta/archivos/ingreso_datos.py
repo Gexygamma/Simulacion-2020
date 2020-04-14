@@ -18,7 +18,7 @@ def ingreso_numero():
         except ValueError:
             print('Ingreso con formato incorrecto.')
         else:
-            if not 0 < numero < 36:
+            if not 0 <= numero <= 36:
                 print('Número ingresado fuera de rango.')
             else:
                 break
