@@ -1,15 +1,8 @@
 import matplotlib.pyplot as plt
 import numpy as np
-from archivos.simulacion import Simulacion, configuracion
+from archivos.simulacion import Simulacion, valores_esperados
 
-TAMAÑO_RULETA, INCLUIR_CERO = configuracion()
-
-ruleta = np.arange(not INCLUIR_CERO, TAMAÑO_RULETA+1)
-
-frecuencia_esperada = 1/len(ruleta)
-promedio_esperado = np.average(ruleta)
-variancia_esperada = np.var(ruleta)
-desvio_esperado = np.std(ruleta)
+frecuencia_esperada, promedio_esperado, variancia_esperada, desvio_esperado = valores_esperados()
 
 def graficar(simulacion, iteraciones, numero):
     plt.subplot(2, 2, 1)
@@ -23,7 +16,6 @@ def graficar(simulacion, iteraciones, numero):
     plt.plot([0, iteraciones-1], [promedio_esperado, promedio_esperado])
     plt.ylabel('Promedio')
     plt.xlabel('Nro iteración')
-
 
     plt.subplot(2, 2, 3)
     plt.plot(simulacion.variancias)
@@ -69,4 +61,5 @@ def graficar_multiples(simulaciones, iteraciones, numero):
     plt.ylabel('Desvío')
     plt.xlabel('Nro iteración')
     
+    plt.tight_layout()
     plt.show()

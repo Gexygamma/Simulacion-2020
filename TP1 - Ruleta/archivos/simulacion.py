@@ -3,8 +3,15 @@ import numpy as np
 TAMAÑO_RULETA = 36
 INCLUIR_CERO = True
 
-def configuracion():
-    return (TAMAÑO_RULETA, INCLUIR_CERO)
+def valores_esperados():
+    ruleta = np.arange(not INCLUIR_CERO, TAMAÑO_RULETA+1)
+
+    frecuencia_esperada = 1/len(ruleta)
+    promedio_esperado = np.average(ruleta)
+    variancia_esperada = np.var(ruleta)
+    desvio_esperado = np.std(ruleta)
+    
+    return frecuencia_esperada, promedio_esperado, variancia_esperada, desvio_esperado
 
 class Simulacion(object):
     def __init__(self):
