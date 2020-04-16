@@ -9,24 +9,30 @@ def graficar(simulacion, iteraciones, numero):
     plt.plot(simulacion.frecuencias)
     plt.plot([0, iteraciones-1], [frecuencia_esperada, frecuencia_esperada])
     plt.ylabel('Frec. Rel. para ' + str(numero))
+    plt.ylim(-0.025, 0.255)
     plt.xlabel('Nro iteración')
 
     plt.subplot(2, 2, 2)
     plt.plot(simulacion.promedios)
     plt.plot([0, iteraciones-1], [promedio_esperado, promedio_esperado])
     plt.ylabel('Promedio')
+    plt.ylim(-1, 37)
+    plt.yticks(np.arange(0, 38, 4.0))
     plt.xlabel('Nro iteración')
 
     plt.subplot(2, 2, 3)
     plt.plot(simulacion.variancias)
     plt.plot([0, iteraciones-1], [variancia_esperada, variancia_esperada])
     plt.ylabel('Variancia')
+    plt.ylim(-10, 260)
     plt.xlabel('Nro iteración')
 
     plt.subplot(2, 2, 4)
     plt.plot(simulacion.desvios)
     plt.plot([0, iteraciones-1], [desvio_esperado, desvio_esperado])
     plt.ylabel('Desvío')
+    plt.ylim(-0.5, 16)
+    plt.yticks(np.arange(0, 16, 2.5))
     plt.xlabel('Nro iteración')
 
     plt.tight_layout()
@@ -38,6 +44,7 @@ def graficar_multiples(simulaciones, iteraciones, numero):
         plt.plot(sim.frecuencias)
     plt.plot([0, iteraciones-1], [frecuencia_esperada, frecuencia_esperada])
     plt.ylabel('Frec. Rel. para ' + str(numero))
+    plt.ylim(-0.025, 0.255)
     plt.xlabel('Nro iteración')
 
     plt.subplot(2, 2, 2)
@@ -45,6 +52,8 @@ def graficar_multiples(simulaciones, iteraciones, numero):
         plt.plot(sim.promedios)
     plt.plot([0, iteraciones-1], [promedio_esperado, promedio_esperado])
     plt.ylabel('Promedio')
+    plt.ylim(-1, 37)
+    plt.yticks(np.arange(0, 38, 4.0))
     plt.xlabel('Nro iteración')
 
     plt.subplot(2, 2, 3)
@@ -52,6 +61,7 @@ def graficar_multiples(simulaciones, iteraciones, numero):
         plt.plot(sim.variancias)
     plt.plot([0, iteraciones-1], [variancia_esperada, variancia_esperada])
     plt.ylabel('Variancia')
+    plt.ylim(-10, 260)
     plt.xlabel('Nro iteración')
 
     plt.subplot(2, 2, 4)
@@ -59,6 +69,8 @@ def graficar_multiples(simulaciones, iteraciones, numero):
         plt.plot(sim.desvios)
     plt.plot([0, iteraciones-1], [desvio_esperado, desvio_esperado])
     plt.ylabel('Desvío')
+    plt.ylim(-0.5, 16)
+    plt.yticks(np.arange(0, 16, 2.5))
     plt.xlabel('Nro iteración')
     
     plt.tight_layout()
