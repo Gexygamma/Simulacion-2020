@@ -49,7 +49,15 @@ class Labouchere(Estrategia):
         return "Labouchere"
     
     def calcular_apuesta(self, tirada_favorable):
-        raise NotImplementedError('Apuesta de la estrategia no implementada.')
+        if tirada_favorable:
+            if len(self.secuencia_actual) > 2:
+                self.secuencia_actual.pop(0)
+                self.secuencia_actual.pop()
+            else:
+                self.secuencia_actual = self.secuencia_inicial.copy()
+        else:
+            self.secuencia_actual.append(self.apuesta[-1])
+        return self.secuencia_actual[0] + self.secuencia_actual[-1]
 
 class Dalembert(Estrategia):
 
