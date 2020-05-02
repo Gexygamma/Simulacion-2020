@@ -1,5 +1,6 @@
 from enum import Enum, auto
 import random as rnd
+import math
 
 rnd.seed()
 numeros_rojos = [1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36]
@@ -31,15 +32,15 @@ class Tirada(object):
     
     @property
     def columna(self):
-        return None
+        return 0 if self.numero == 0 else (self.numero - 1) % 3 + 1
     
     @property
     def fila(self):
-        return None
+        return math.ceil(self.numero / 3)
     
     @property
     def docena(self):
-        return None
+        return math.ceil(self.numero / 12)
     
     @property
     def paridad(self):
@@ -49,3 +50,4 @@ class Tirada(object):
             return Paridad.PAR
         else:
             return Paridad.IMPAR
+    
