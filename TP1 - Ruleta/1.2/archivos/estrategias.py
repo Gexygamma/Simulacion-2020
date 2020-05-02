@@ -5,18 +5,22 @@ class Estrategia(object):
         self.rendimiento = [0]
         self.barrera_absorcion = [apuesta_inicial]
     
-    def ejecutar(self, tirada_favorable):
-        """ Simula la ejecución de una sola tirada, siguiendo un algoritmo específico. """
-        raise NotImplementedError('Ejecución de la estrategia no implementada.')
+    def calcular_rendimiento(self, tirada_favorable):
+        return self.rendimiento[-1] + self.apuesta[-1] * (int(tirada_favorable) * 2 - 1)
+    
+    def calcular_apuesta(self, tirada_favorable):
+        raise NotImplementedError('Apuesta de la estrategia no implementada.')
 
-    def guardar_variables(self, rendimiento, apuesta):
-        """ Guarda variables para el posterior gráfico """
+    def calcular_barrera(self, rendimiento, apuesta):
+        return max(apuesta - rendimiento, self.barrera_absorcion[-1])
+        
+    def ejecutar(self, tirada_favorable):
+        rendimiento = self.calcular_rendimiento(tirada_favorable)
+        apuesta = self.calcular_apuesta(tirada_favorable)
+        barrera_absorcion = self.calcular_barrera(rendimiento, apuesta)
         self.rendimiento.append(rendimiento)
         self.apuesta.append(apuesta)
-        if apuesta - rendimiento > self.barrera_absorcion[-1]:
-            self.barrera_absorcion.append(apuesta - rendimiento)
-        else:
-            self.barrera_absorcion.append(self.barrera_absorcion[-1])
+        self.barrera_absorcion.append(barrera_absorcion)
 
 class Martingala(Estrategia):
 
@@ -31,27 +35,21 @@ class Martingala(Estrategia):
     def __str__(self):
         return "Martingala %s" % ("Rápido" if self.tipo_estrategia else "Lento")
 
-    def ejecutar(self, tirada_favorable):
-        if tirada_favorable:
-            rendimiento = self.rendimiento[-1]+self.apuesta[-1]
-            apuesta = self.apuesta_minima
-        else:
-            rendimiento = self.rendimiento[-1]-self.apuesta[-1]
-            apuesta = self.apuesta[-1]*2+self.tipo_estrategia
-        super().guardar_variables(rendimiento, apuesta)
+    def calcular_apuesta(self, tirada_favorable):
+        return self.apuesta_minima if tirada_favorable else self.apuesta[-1]*2+self.tipo_estrategia
         
 class Labouchere(Estrategia):
 
     def __init__(self, secuencia_inicial):
         self.secuencia_inicial = secuencia_inicial
-        self.apuesta_actual = secuencia_inicial[0] + secuencia_inicial[-1]
-        super().__init__(self.apuesta_actual)
+        self.secuencia_actual = secuencia_inicial.copy()
+        super().__init__(self.secuencia_actual[0] + self.secuencia_actual[-1])
     
     def __str__(self):
         return "Labouchere"
     
-    def ejecutar(self, tirada_favorable):
-        raise NotImplementedError('Estrategia no implementada.')
+    def calcular_apuesta(self, tirada_favorable):
+        raise NotImplementedError('Apuesta de la estrategia no implementada.')
 
 class Dalembert(Estrategia):
 
@@ -61,5 +59,5 @@ class Dalembert(Estrategia):
     def __str__(self):
         "D\'alembert"
     
-    def ejecutar(self, tirada_favorable):
+    def calcular_apuesta(self, tirada_favorable):
         raise NotImplementedError('Estrategia no implementada.')
