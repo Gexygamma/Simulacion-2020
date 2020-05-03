@@ -61,11 +61,15 @@ class Labouchere(Estrategia):
 
 class Dalembert(Estrategia):
 
-    def __init__(self, secuencia_inicial):
-        super().__init__(0)
+    def __init__(self, apuesta_base):
+        self.apuesta_base = apuesta_base
+        super().__init__(apuesta_base)
     
     def __str__(self):
-        "D\'alembert"
+        return "D\'alembert"
     
     def calcular_apuesta(self, tirada_favorable):
-        raise NotImplementedError('Estrategia no implementada.')
+        if tirada_favorable:
+            return max(self.apuesta[-1] - self.apuesta_base, self.apuesta_base)
+        else:
+            return self.apuesta[-1] + self.apuesta_base
