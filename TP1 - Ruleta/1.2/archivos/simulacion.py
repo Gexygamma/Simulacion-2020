@@ -13,10 +13,15 @@ def calcular_frec_relativa(iteraciones, tirada_favorable):
 
 class Simulacion(object):
 
-    def __init__(self, cantidad_tiradas, tirada_favorable):
+    def __init__(self, cantidad_tiradas, tirada_favorable, graficar_tiradas=None):
         self.estrategias = []
+        self.frec_absoluta_favorable = [0]
         self.cantidad_tiradas = cantidad_tiradas
         self.tirada_favorable = tirada_favorable
+        if graficar_tiradas is None:
+            self.graficar_tiradas = True
+        else:
+            self.graficar_tiradas = graficar_tiradas
     
     def agregar_estrategia(self, *args):
         """ Agrega una estrategia de apuesta a la simulación. """
@@ -27,5 +32,7 @@ class Simulacion(object):
         """ Corre la simulación. Ejecuta todos los algoritmos cargados. """
         for _i in range(self.cantidad_tiradas):
             tirada = Tirada()
+            favorable = self.tirada_favorable(tirada)
+            self.frec_absoluta_favorable.append(self.frec_absoluta_favorable[-1] + (favorable * 2 - 1))
             for estrategia in self.estrategias:
-                estrategia.ejecutar(self.tirada_favorable(tirada))
+                estrategia.ejecutar(favorable)
