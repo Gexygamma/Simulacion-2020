@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 from matplotlib.widgets import CheckButtons
+from numpy import ndarray
 
 def graficar_frec(frec_relativa):
     plt.plot(frec_relativa)
@@ -10,6 +11,7 @@ def graficar_frec(frec_relativa):
 
 def graficar_simulacion(simulacion):
     _fig, ax = plt.subplots(ncols=len(simulacion.estrategias))
+    if not ax is ndarray: ax = [ax]
     for i, estrategia in enumerate(simulacion.estrategias):
         ax[i].plot(estrategia.rendimiento, label='Rendimiento')
         ax[i].plot(estrategia.apuesta, label='Apuesta')
