@@ -11,7 +11,8 @@ def graficar_frec(frec_relativa):
 
 def graficar_simulacion(simulacion):
     _fig, ax = plt.subplots(ncols=len(simulacion.estrategias))
-    if not ax is ndarray: ax = [ax]
+    if type(ax) != ndarray:
+        ax = [ax]
     for i, estrategia in enumerate(simulacion.estrategias):
         ax[i].plot(estrategia.rendimiento, label='Rendimiento')
         ax[i].plot(estrategia.apuesta, label='Apuesta')
