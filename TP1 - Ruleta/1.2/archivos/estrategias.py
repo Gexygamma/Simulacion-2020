@@ -1,3 +1,6 @@
+from enum import Enum, auto
+import math
+
 class Estrategia(object):
 
     def __init__(self, apuesta_inicial):
@@ -24,19 +27,49 @@ class Estrategia(object):
 
 class Martingala(Estrategia):
 
-    SIMPLE = 0
-    GRANDE = 1
-
-    def __init__(self, apuesta_minima, tipo_estrategia):
+    def __init__(self, apuesta_minima):
         self.apuesta_minima = apuesta_minima
-        self.tipo_estrategia = tipo_estrategia
         super().__init__(apuesta_minima)
     
     def __str__(self):
-        return "Martingala %s" % ("Grande" if self.tipo_estrategia else "Simple")
+        return "Martingala Simple"
 
     def calcular_apuesta(self, tirada_favorable):
-        return self.apuesta_minima if tirada_favorable else self.apuesta[-1]*2+self.tipo_estrategia
+        return self.apuesta_minima if tirada_favorable else self.apuesta[-1]*2
+
+class MartingalaGrande(Martingala):
+
+    def __init__(self, apuesta_minima):
+        super().__init__(apuesta_minima)
+    
+    def __str__(self):
+        return "Martingala Grande"
+
+    def calcular_apuesta(self, tirada_favorable):
+        apuesta = super().calcular_apuesta(tirada_favorable)
+        return apuesta if tirada_favorable else apuesta+1
+
+class MartingalaInvertida(Martingala):
+
+    def __init__(self, apuesta_minima, limite=None):
+        if limite == None:
+            self.limite = 0
+        else:
+            self.limite = limite
+        super().__init__(apuesta_minima)
+
+    def __str__(self):
+        return "Martingala Inv. " + ("con L=%d" % self.limite if self.limite > 0 else "Ilimitada")
+    
+    def calcular_apuesta(self, tirada_favorable):
+        if tirada_favorable:
+            apuesta = self.apuesta[-1]*2
+            if self.limite != 0 and math.floor(apuesta) > self.limite:
+                return self.apuesta_minima
+            else:
+                return apuesta
+        else:
+            return self.apuesta_minima
         
 class Labouchere(Estrategia):
 
@@ -59,6 +92,17 @@ class Labouchere(Estrategia):
             self.secuencia_actual.append(self.apuesta[-1])
         return self.secuencia_actual[0] + self.secuencia_actual[-1]
 
+class LabouchereInvertida(Labouchere):
+
+    def __init__(self, secuencia_inicial):
+        super().__init__(secuencia_inicial)
+    
+    def __str__(self):
+        return "Labouchere Inv."
+    
+    def calcular_apuesta(self, tirada_favorable):
+        return super().calcular_apuesta(not tirada_favorable)
+
 class Dalembert(Estrategia):
 
     def __init__(self, apuesta_base):
@@ -66,10 +110,32 @@ class Dalembert(Estrategia):
         super().__init__(apuesta_base)
     
     def __str__(self):
-        return "D\'alembert"
+        return "D\'Alembert Normal"
     
     def calcular_apuesta(self, tirada_favorable):
         if tirada_favorable:
             return max(self.apuesta[-1] - self.apuesta_base, self.apuesta_base)
         else:
             return self.apuesta[-1] + self.apuesta_base
+
+class DalembertInvertida(Dalembert):
+
+    def __init__(self, apuesta_base, limite_unidades=None):
+        if limite_unidades is None:
+            self.limite_unidades = 0
+        else:
+            self.limite_unidades = limite_unidades
+        super().__init__(apuesta_base)
+
+    def __str__(self):
+        return "D\'Alembert Inv. " + ("con L=%du" % self.limite_unidades if self.limite_unidades > 0 else "Ilimitada")
+    
+    def calcular_apuesta(self, tirada_favorable):
+        if tirada_favorable:
+            apuesta = self.apuesta[-1] + self.apuesta_base
+            if self.limite_unidades != 0 and math.floor(apuesta) > self.limite_unidades * self.apuesta_base:
+                return self.apuesta_base
+            else:
+                return apuesta
+        else:
+            return max(self.apuesta[-1] - self.apuesta_base, self.apuesta_base)
