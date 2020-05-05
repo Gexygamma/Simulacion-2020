@@ -1,5 +1,5 @@
 from archivos.simulacion import Simulacion, calcular_frec_relativa
-from archivos.ruleta import Color
+from archivos.ruleta import Color, Paridad
 from archivos.estrategias import Martingala, Labouchere, Dalembert
 from archivos.graficador import graficar_frec, graficar_simulacion
 
@@ -18,8 +18,9 @@ def sim_estrategia():
 
     sim = Simulacion(cantidad_tiradas, tirada_favorable)
     sim.agregar_estrategia(
-        Martingala(1, Martingala.LENTO),
-        Martingala(1, Martingala.RAPIDO)
+        Martingala(1, Martingala.GRANDE),
+        Labouchere([1,2,3]),
+        Dalembert(5)
     )
     sim.ejecutar()
     graficar_simulacion(sim)

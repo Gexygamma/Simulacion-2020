@@ -24,8 +24,8 @@ class Estrategia(object):
 
 class Martingala(Estrategia):
 
-    LENTO = 0
-    RAPIDO = 1
+    SIMPLE = 0
+    GRANDE = 1
 
     def __init__(self, apuesta_minima, tipo_estrategia):
         self.apuesta_minima = apuesta_minima
@@ -33,7 +33,7 @@ class Martingala(Estrategia):
         super().__init__(apuesta_minima)
     
     def __str__(self):
-        return "Martingala %s" % ("Rápido" if self.tipo_estrategia else "Lento")
+        return "Martingala %s" % ("Grande" if self.tipo_estrategia else "Simple")
 
     def calcular_apuesta(self, tirada_favorable):
         return self.apuesta_minima if tirada_favorable else self.apuesta[-1]*2+self.tipo_estrategia
