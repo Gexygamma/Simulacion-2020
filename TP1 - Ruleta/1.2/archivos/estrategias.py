@@ -9,6 +9,9 @@ class Estrategia(object):
         self.barrera_absorcion = [apuesta_inicial]
     
     def calcular_rendimiento(self, tirada_favorable):
+        # Importante: El rendimiento siempre asume que la apuesta es simple
+        # ya que es la única usada en las simulaciones. Si se quisiera probar
+        # estrategias usando otro tipo de apuestas se debe ajustar este método.
         return self.rendimiento[-1] + self.apuesta[-1] * (int(tirada_favorable) * 2 - 1)
     
     def calcular_apuesta(self, tirada_favorable):
