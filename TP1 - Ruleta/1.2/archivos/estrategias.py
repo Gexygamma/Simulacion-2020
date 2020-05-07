@@ -82,7 +82,7 @@ class Labouchere(Estrategia):
         super().__init__(self.secuencia_actual[0] + self.secuencia_actual[-1])
     
     def __str__(self):
-        return "Labouchere"
+        return "Labouchere Normal"
     
     def calcular_apuesta(self, tirada_favorable):
         if tirada_favorable:
@@ -97,14 +97,22 @@ class Labouchere(Estrategia):
 
 class LabouchereInvertida(Labouchere):
 
-    def __init__(self, secuencia_inicial):
+    def __init__(self, secuencia_inicial, limite=None):
+        if limite is None:
+            self.limite = 0
+        else:
+            self.limite = limite
         super().__init__(secuencia_inicial)
     
     def __str__(self):
-        return "Labouchere Inv."
+        return "Labouchere Inv. " + ("con L=%d" % self.limite if self.limite > 0 else "Ilimitada")
     
     def calcular_apuesta(self, tirada_favorable):
-        return super().calcular_apuesta(not tirada_favorable)
+        apuesta = super().calcular_apuesta(not tirada_favorable)
+        if self.limite > 0 and self.secuencia_actual[-1] > self.limite:
+            self.secuencia_actual = self.secuencia_inicial.copy()
+            apuesta = self.secuencia_actual[0] + self.secuencia_actual[-1]
+        return apuesta
 
 class Dalembert(Estrategia):
 
