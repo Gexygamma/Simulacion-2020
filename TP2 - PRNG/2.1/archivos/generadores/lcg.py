@@ -15,14 +15,17 @@ def lcg(limit, seed=None, m=2**32, a=134775813, c=1):
     """
 
     if seed is None:
-        seed = rnd.randint(10**9, 10**10-1)
+        seed = rnd.randint(0, m-1)
     elif seed < 0:
         raise ValueError("Seed must be a positive number ({0} was given).".format(str(seed)))
-    print("LCG - Seed is:", seed)
     if limit < 0:
         raise ValueError("Limit must be a positive number ({0} was given).".format(str(limit)))
+    
+    print("LCG - Semilla es:", seed)
+
     count = 0
     while count < limit:
         seed = (a * seed + c) % m
         count += 1
-        yield seed
+         # El nro es normalizado al rango [0,1] para simplificar las comparaciones.
+        yield seed / (m-1)
