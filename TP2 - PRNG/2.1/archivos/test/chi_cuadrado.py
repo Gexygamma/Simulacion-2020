@@ -1,10 +1,10 @@
 from scipy.stats import chi2
 from math import floor
 
-def chi_cuadrado(generador, n_interv, a=0.05):
+def chi_cuadrado(generador, n_interv=10, a=0.05):
     """
     Implementación de prueba de chi cuadrado (frecuencia). Verifica si el generador
-    no es rechazado por la hipotesis nula.
+    no es rechazado según la hipotesis nula.
 
     Args:
         generador: Generador de nros aleatorios a probar.
@@ -17,10 +17,6 @@ def chi_cuadrado(generador, n_interv, a=0.05):
     n_obsv = len(muestra)
     gr_lib = n_interv - 1
     frec_esperada = n_obsv / n_interv
-
-    # Excepción para asegurar que todos los intervalos tengan la misma frec esperada.
-    if n_obsv % n_interv != 0:
-        raise ValueError("Observaciones debe ser múltiplo de intervalos.")
     
     # Poblar intervalos.
     intervalos = [0] * n_interv
