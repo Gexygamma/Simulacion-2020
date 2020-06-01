@@ -2,7 +2,7 @@ from math import floor
 from scipy.stats import ksone
 from archivos.utils import pairwise
 
-def huecos(generador, base=10, a=0.05):
+def huecos(generador, base=20, a=0.05):
     """
     Implementación de prueba de huecos. Verifica si el generador no es rechazado
     según la hipotesis nula.
