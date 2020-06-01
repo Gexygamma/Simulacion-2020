@@ -1,5 +1,7 @@
 import random as rnd
 
+from archivos.generadores._args import inicializar_semilla, manejar_excepciones
+
 def lcg(limit, seed=None, m=2**32, a=134775813, c=1):
     """
     Implementación del Generador Lineal Congruencial. (Nota: Como parámetros
@@ -14,18 +16,13 @@ def lcg(limit, seed=None, m=2**32, a=134775813, c=1):
         c: El operando incrementador.
     """
 
-    if seed is None:
-        seed = rnd.randint(0, m-1)
-    elif seed < 0:
-        raise ValueError("Seed must be a positive number ({0} was given).".format(str(seed)))
-    if limit < 0:
-        raise ValueError("Limit must be a positive number ({0} was given).".format(str(limit)))
-    
-    print("LCG - Semilla es:", seed)
+    max_value = m - 1
+    seed = inicializar_semilla(seed, max_value)
+    manejar_excepciones(limit, seed, m, a, c)
 
     count = 0
     while count < limit:
         seed = (a * seed + c) % m
         count += 1
-         # El nro es normalizado al rango [0,1] para simplificar las comparaciones.
-        yield seed / (m-1)
+        # El nro es normalizado al rango [0,1] para simplificar las comparaciones.
+        yield seed / max_value
