@@ -1,23 +1,23 @@
-import dist 
 import matplotlib.pyplot as plt
+import numpy as np
+
+import dist
 
 tamaño_muestra = 100000
 
+def generar_muestra(dist, **kwargs):
+    return [dist(**kwargs) for _i in range(tamaño_muestra)]
+
 def mostrar_continua(dist, **kwargs):
-    data = [dist(**kwargs) for _i in range(tamaño_muestra)]
+    data = generar_muestra(dist, **kwargs)
     plt.hist(data, bins=50, density=True)
     plt.show()
 
 def mostrar_discreta(dist, **kwargs):
-    data = [dist(**kwargs) for _i in range(tamaño_muestra)]
-    md = min(data)
-    x = [n for n in range(md, max(data) + 1)]
-    y = [0] * len(x)
-    for point in data:
-        y[point-md] += 1
-    for i in range(len(y)):
-        y[i] /= len(data)
-    plt.bar(x, y, tick_label=x)
+    data = generar_muestra(dist, **kwargs)
+    bar_data = [value/len(data) for value in np.bincount(data)[min(data):]]
+    labels = np.arange(min(data), max(data)+1)
+    plt.bar(labels, bar_data, tick_label=labels)
     plt.show()
 
 if __name__ == "__main__":
