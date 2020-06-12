@@ -1,9 +1,11 @@
 import matplotlib.pyplot as plt
 import numpy as np
+import scipy.stats as st
 
 import dist
 
 tamaño_muestra = 100000
+nivel_significancia = 0.05
 
 def generar_muestra(gen):
     return [gen.generar() for _i in range(tamaño_muestra)]
@@ -30,6 +32,19 @@ def mostrar(gen):
         frec_esp = [gen.calc_valor_teorico(i) for i in rango]
         plt.stem(rango, frec_esp, '--', use_line_collection=True)
     plt.show()
+
+def test(gen):
+    data = generar_muestra(gen)
+    if gen.tipo == dist.TipoDist.Continua:
+        stat, _pvalue = st.kstest(data, gen.scipy_name, args=gen.params, N=tamaño_muestra)
+        valor_critico = st.ksone.ppf(1-nivel_significancia/2, tamaño_muestra)
+        result = stat < valor_critico
+    else:
+        frec_data = calc_frec_relativa(data)
+        frec_esp = [gen.calc_valor_teorico(i) for i in np.arange(min(data), max(data)+1)]
+        _stat, pvalue = st.chisquare(frec_data, frec_esp, ddof=len(frec_data)-1)
+        result = pvalue > nivel_significancia   
+    print(result)
 
 if __name__ == "__main__":
     mostrar(dist.Binomial(10, 0.5))
