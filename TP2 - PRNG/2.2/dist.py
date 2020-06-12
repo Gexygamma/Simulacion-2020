@@ -87,6 +87,20 @@ class Binomial(object):
     def calc_valor_teorico(self, punto):
         return st.binom.pmf(punto, self.n, self.p)
 
+class Geometrica(object):
+    tipo = TipoDist.Discreta
+    scipy_name = "geom"
+
+    def __init__(self, p):
+        self.p = p
+        self.params = (p, )
+    
+    def generar(self):
+        return int(log(random(), 1-self.p))
+    
+    def calc_valor_teorico(self, punto):
+        return st.geom.pmf(punto+1, self.p)
+
 class Hipergeometrica(object):
     tipo = TipoDist.Discreta
     scipy_name = "hypergeom"
@@ -110,23 +124,6 @@ class Hipergeometrica(object):
 
     def calc_valor_teorico(self, punto):
         return st.hypergeom.pmf(punto, self.m+self.n, self.m, self.k)
-
-class Pascal(object):
-    tipo = TipoDist.Discreta
-    scipy_name = "nbinom"
-
-    def __init__(self, k, p):
-        self.k = k
-        self.p = p
-        self.params = k, p
-    
-    def generar(self):
-        # return st.nbinom.rvs(self.k, self.p)
-        pr = prod(random() for _i in range(self.k))
-        return int(log(pr, 1-self.p))
-    
-    def calc_valor_teorico(self, punto):
-        return st.nbinom.pmf(punto, self.k, self.p)
 
 class Poisson(object):
     tipo = TipoDist.Discreta
