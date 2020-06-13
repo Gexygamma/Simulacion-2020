@@ -42,9 +42,10 @@ def test(gen):
     else:
         frec_data = calc_frec_relativa(data)
         frec_esp = [gen.calc_valor_teorico(i) for i in np.arange(min(data), max(data)+1)]
-        _stat, pvalue = st.chisquare(frec_data, frec_esp, ddof=len(frec_data)-1)
-        result = pvalue > nivel_significancia   
-    print(result)
+        stat, _pvalue = st.chisquare(frec_data, frec_esp)
+        valor_critico = st.chi2.isf(q=nivel_significancia, df=len(frec_data)-1)
+        result = stat < valor_critico
+    print(result, stat, valor_critico)
 
 if __name__ == "__main__":
-    mostrar(dist.Binomial(10, 0.5))
+    test(dist.Binomial(10, 0.5))
