@@ -8,13 +8,12 @@ tamaño_muestra = 100000
 nivel_significancia = 0.05
 
 def generar_muestra(gen):
-    return [gen.generar() for _i in range(tamaño_muestra)]
+    return [gen.generar() for _i in range(tamaño_muestra)], gen
 
 def calc_frec_relativa(data):
     return [value/len(data) for value in np.bincount(data)[min(data):]]
 
-def mostrar(gen):
-    data = generar_muestra(gen)
+def mostrar(data, gen):
     if gen.tipo == dist.TipoDist.Continua: # Continua
         # Graficar muestra.
         plt.hist(data, bins='auto', density=True, color='orange')
@@ -33,8 +32,7 @@ def mostrar(gen):
         plt.stem(rango, frec_esp, '--', use_line_collection=True)
     plt.show()
 
-def test(gen):
-    data = generar_muestra(gen)
+def test(data, gen, prnt=True):
     if gen.tipo == dist.TipoDist.Continua:
         stat, _pvalue = st.kstest(data, gen.scipy_name, args=gen.params, N=tamaño_muestra)
         valor_critico = st.ksone.ppf(1-nivel_significancia/2, tamaño_muestra)
@@ -45,7 +43,19 @@ def test(gen):
         stat, _pvalue = st.chisquare(frec_data, frec_esp)
         valor_critico = st.chi2.isf(q=nivel_significancia, df=len(frec_data)-1)
         result = stat < valor_critico
-    print(result, stat, valor_critico)
+    if prnt:
+        print(result, stat, valor_critico)
+    return result
+
+def multi_test(d, n):
+    x = sum(test(*generar_muestra(d), prnt=False) for _i in range(n))
+    print("Pruebas exitosas: {0}/{1}".format(x, n))
 
 if __name__ == "__main__":
-    test(dist.Binomial(10, 0.5))
+
+    # Graficar y testear muestra.
+    muestra = generar_muestra(dist.Hipergeometrica(8, 10, 6))
+    test(*muestra)
+    mostrar(*muestra)
+
+    # multi_test(dist.Exponencial(2), 1000)
