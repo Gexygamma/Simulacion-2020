@@ -1,5 +1,5 @@
 from enum import Enum, auto
-from math import log, prod, exp
+from math import log, prod, exp, ceil
 from random import random
 import scipy.stats as st
 
@@ -30,7 +30,7 @@ class Exponencial(object):
 
     def __init__(self, lmbd):
         self.lmbd = lmbd
-        self.params = (lmbd, )
+        self.params = 0, 1/lmbd
     
     def generar(self):
         return -log(random()) / self.lmbd
@@ -45,7 +45,7 @@ class Gamma(object):
     def __init__(self, k, lmbd):
         self.k = k
         self.lmbd = lmbd
-        self.params = (lmbd, )
+        self.params = k, 0, 1/lmbd
     
     def generar(self):
         p = prod(random() for _i in range(self.k))
@@ -96,10 +96,10 @@ class Geometrica(object):
         self.params = (p, )
     
     def generar(self):
-        return int(log(random(), 1-self.p))
+        return ceil(log(random(), 1-self.p))
     
     def calc_valor_teorico(self, punto):
-        return st.geom.pmf(punto+1, self.p)
+        return st.geom.pmf(punto, self.p)
 
 class Hipergeometrica(object):
     tipo = TipoDist.Discreta
@@ -109,7 +109,7 @@ class Hipergeometrica(object):
         self.m = m
         self.n = n
         self.k = k
-        self.params = m, n, k
+        self.params = m+n, m, k
     
     def generar(self):
         total = self.m + self.n
